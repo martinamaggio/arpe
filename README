@@ -1,0 +1,53 @@
+ABOUT
+--------------------
+Whenever you have to run multiple experiments changing the values of parameters 
+and collecting performance measurements with these distinct set of values, it 
+is convenient to write a bash script to automate the execution. However, it can 
+be really painful to write the same script over and over again.
+
+Also, once you are done with the script you need to collect data and analyze 
+them. In some cases, it is convenient to find out a relationship between the 
+"parameters" that were changed and the "measurable effects" of these parameters.
+Among these effects there's time consumption, CPU consumption, power 
+consumption (whenever possible), hardware counters and whatever you can add 
+here and measure on the target machine. These relationships may be different 
+from what a programmer expected in the first place, or multiple simultaneous 
+changes may interfere with one another.
+
+This repository contains ARPE (Analyzing the Relationship between Parameters 
+and Effectors), a tool to analyze the effect of parameter changes on the run of 
+applications. 
+
+
+
+INSTRUCTIONS
+--------------------
+* To run the script generator type make.
+  This generates a bin directory copying all the necessary files and run a 
+  configurator program that generate your script. The inputs to be given are 
+  the number of execution per each configuration, the command to be executed 
+  (with strings for parameter values) the changing parameters and their set of 
+  values.
+* Once you are done move into the bin directory and run ./execute.bash.
+  This runs the experiments and collect measurements data. If you want to take 
+  full advantage of the tool you should have root priviledges when running the 
+  script and have some other tools installed (oprofile, sysstat). Oprofile will 
+  take hardware counters and produce a report. Sysstat is used for CPU 
+  consumption and requires the file system /proc to be mounted.
+* Still under development. Analyze part.
+  Once you have produced a "results" directory running the scripts, the tool 
+  allows you to anlyze dome data. In the bin directory run ./analyze.bash <dir> 
+  passing the directory where the data are stored.
+
+
+
+REQUISITES
+--------------------
+This tool depends on:
+* Oprofile
+* Sysstat
+* Python with: numpy, scipy, statsmodels
+
+To remove the dependencies on oprofile and sysstat (and have only time duration 
+analysis) you can comment the lines in /src/basic/before.bash and 
+/src/basic/after.bash that deal with the specific tool usage.
